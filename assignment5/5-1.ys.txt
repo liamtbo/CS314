@@ -1,0 +1,38 @@
+
+/*
+void swap(long *xp, long *yp) {
+    long x = *xp;   // x = value xp points at
+    long y = *yp;   // y = value yp points at
+    *xp = y;        // xp points at y
+    *yp = x;        // yp points at x
+}
+*/
+
+swap:                           // swap function
+        mrmovq (%rdi), %r10     // move m xp value into reg10
+        mrmovq (%rsi), %r9      // move m yp value into reg9
+        rmmovq %r10, (%rsi)     // move yp value into m xp
+        rmmovq %r9, (%rdi)      // move xp value into m yp
+
+// *arr in %rdi
+// length in %rsi
+
+
+sort:
+    xorq %rax, %rax         # sorted = 0
+    subq $1, %rax           # set CC for while loop
+    jmp whiletest                # Goto test
+
+whiletest:  jne     forloop    # stop when sorted = 1
+
+whileloop:                  # while loop
+    irmovq $1, %rax         # sorted = 1
+    xorq %rbx, %rbx         # i = 0
+    subq $1, %rsi           # length -= 1
+    jmp forloop
+forloop:
+    add1 $1, %rax           # ++i
+    subq %rsi, %rbx         # set CC i == length
+fortest:    jne     forloop # if i != length then forloop, else return 
+    ret
+
